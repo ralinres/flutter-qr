@@ -57,7 +57,7 @@ class DBProvider{
 
   }
    
-   //crear registros una variante
+   //crear registros (una variante) no se va a usar pero para saber que existe
    nuevoScanRaw(ScanModel nuevo) async{
 
       final db = await database;
@@ -65,8 +65,8 @@ class DBProvider{
        //atento con el espacio al final de la primera linea
       final res = db.rawInsert(
            
-           'INSERT INTO Scans (id,tipo,valor) '
-           'VALUES (${nuevo.id},${nuevo.tipo},${nuevo.valor})'
+           "INSERT INTO Scans (id,tipo,valor) "
+           "VALUES ( ${nuevo.id}, '${nuevo.tipo}', '${nuevo.valor}')"
 
       );
 
@@ -74,14 +74,85 @@ class DBProvider{
 
    }
    
-   //otra forma mas simple
+   //otra forma mas simple ( es la que se va a usar)
    nuevoScan(ScanModel nuevo) async{
       
-      final db = await database;
-      final res = db.insert('Scans', nuevo.toJson());
+      final db  = await database; //await por que retona un future
+      final res = await db.insert('Scans', nuevo.toJson());
 
       return res;
 
    }
+
+   //select -Obtener Informacion
+
+   Future<ScanModel> getScanId(int id) async{
+        
+       final db = await database;
+       
+       //el ? significa que el id es pasado por parametro y en el whereArgs paso una lista con el respectivo valor 
+       final res = await db.query('Scans',where: 'id = ?',whereArgs: [id]);
+        
+        //el res retorna un un map por lo que necesiro el primer elemento y con el constructor
+        //ScanModel.fromJson retorno un ScanModel ,caso conttrario retorno null
+       return res.isNotEmpty ? ScanModel.fromJson(res.first) : null;
+
+
+   }
+
+   Future <List<ScanModel>> getTodosScans() async{
+     
+       final db = await database;
+       final res = await db.query('Scans' );
+       
+       //recorro la lista y los convirto a ScanModel
+       List<ScanModel> list = res.isNotEmpty ? res.map((element) => ScanModel.fromJson(element)).toList() : [];
+       
+       return list;
+   }
+
+     Future <List<ScanModel>> getScansPorTipo( String tipo ) async{
+     
+       final db = await database;
+       final res = await db.query('Scans',where: 'tipo = ?',whereArgs: [tipo]);
+       
+       //recorro la lista y los convirto a ScanModel
+       List<ScanModel> list = res.isNotEmpty ? res.map((element) => ScanModel.fromJson(element)).toList() : [];
+       
+       return list;
+   }
+
+   //actualizar registros retorna registos afectados
+   Future<int> updateScan( ScanModel nuevoScan ) async{
+      
+      final db  = await database; //await por que retona un future
+      final res = await db.update('Scans', nuevoScan.toJson(),where: 'id = ?',whereArgs: [nuevoScan.id]);
+       
+      return res; 
+   }
+
+      //eliminar scan
+   Future<int> deleteScan( int id ) async{
+      
+      final db  = await database; //await por que retona un future
+      
+      //ojo si aqui no paso el where y dejo la tabla borra la tabla de la base dato
+      final res = await db.delete('Scans',where: 'id = ?',whereArgs: [id]);
+       
+      return res; 
+   }
+      
+      //eliminar todos los argumentos de la tabla
+      Future<int> deleteAll( ) async{
+      
+      final db  = await database; //await por que retona un future
+      
+      //rawDelete de esta forma recibe el delete en sql
+      final res = await db.rawDelete('DELETE from Scans');
+       
+      return res; 
+   }
+
+
 
 }
