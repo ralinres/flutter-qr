@@ -47,6 +47,9 @@
       
       <!-- este es mi permiso para utilizar la camara -->
     <uses-permission android:name="android.permission.CAMERA" />
+     <!-- este es mi permiso para conexion a internet -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
 
 </manifest>

@@ -41,6 +41,9 @@ static final ScansBloc _singlenton = new ScansBloc._internal();
  
  //GET para obtener el stream que fluye
   Stream<List<ScanModel>> get scansStream => _scanStreamController.stream;
+ 
+ //GET para obtener el stream que fluye de tipo http
+  Stream<List<ScanModel>> get scansStreamHttp => _scanStreamController.stream;
   
  obtenerScans() async{
 

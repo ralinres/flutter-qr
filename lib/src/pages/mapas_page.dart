@@ -11,6 +11,10 @@ class MapasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    //llamamo a esta instruccion para llenar el stream cada vez que se pinta la pagina
+    scanBloc.obtenerScans();
+
     return StreamBuilder <List <ScanModel>>(//para manejar el stream necesito el stream builder
       stream:  scanBloc.scansStream, //este el metodo que retorna el strema ( StreamBuilder necesita un stream para consumir )
       builder: (BuildContext context, AsyncSnapshot<List<ScanModel>> snapshot) {

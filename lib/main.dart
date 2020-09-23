@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         '/'                : (BuildContext context) => HomePage(),
         'direcciones'      : (BuildContext context) =>DireccionesPage(),
         'mapas'            : (BuildContext context) =>MapasPage(),
-         'mapa_despliegue' : (BuildContext context) =>DespliegueMapa()
+        'mapa_despliegue'  : (BuildContext context) =>DespliegueMapa()
 
       } ,
     );

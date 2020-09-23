@@ -1,10 +1,9 @@
 
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:qrreaderapp/src/modelos/scan_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-launchURL(ScanModel model,BuildContext context ) async {
+launchURL(ScanModel model, BuildContext context ) async {
     
     if(model.tipo == 'http'){
 
@@ -19,7 +18,7 @@ launchURL(ScanModel model,BuildContext context ) async {
     }
     else{
       
-      Navigator.pushNamed(context, 'mapa_despliegue');
+     Navigator.pushNamed(context, 'mapa_despliegue',arguments: model);
 
     }
 

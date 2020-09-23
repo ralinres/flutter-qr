@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
            floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.filter_center_focus),
                 backgroundColor: Theme.of(context).primaryColor, //esto es el color primario del tema de mi app ( esta config en e main )
-                onPressed:   _escanearQR(context), //este es mi metodo
+                onPressed: () =>  _escanearQR(context), //este es mi metodo
                 ),
     );
   }
@@ -56,9 +56,8 @@ class _HomePageState extends State<HomePage> {
              
          var value = await BarcodeScanner.scan(); 
          String result = value.rawContent;
-         print(' Este es el resultado: ${value.rawContent}');//bar code contentn
 
-         if( result != null){
+         if( result != null && result != "" ){
             
             final nuevo = ScanModel(valor: result);
             scanBloc.agregarScans(nuevo);
@@ -68,14 +67,18 @@ class _HomePageState extends State<HomePage> {
               if( Platform.isIOS ){
                    Future.delayed(Duration(milliseconds: 700),(){
                          
-                      utils.launchURL(nuevo,context);
-
+                    utils.launchURL(nuevo,context);
                    });
               }else{
                 
                  utils.launchURL(nuevo,context);
 
+
               }
+
+         }else{
+             
+             print('nassss!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
 
          }
 
