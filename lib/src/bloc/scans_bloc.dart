@@ -1,13 +1,15 @@
 
 import 'dart:async';
 
+import 'package:qrreaderapp/src/bloc/validator.dart';
 import 'package:qrreaderapp/src/modelos/scan_model.dart';
 import 'package:qrreaderapp/src/providers/db_provider.dart';
 
 
 
 //en esta clase voy a implementar otra forma de patron singlenton
-class ScansBloc{
+//el with se llama mixim en dart agrega las propiedades de una clase externa
+class ScansBloc with Validators{
    
   // esto seria una forma de declarar el constructor privado 
  //con la idea de que mi instancia de miclase sea solo una
@@ -39,11 +41,11 @@ static final ScansBloc _singlenton = new ScansBloc._internal();
   }  
 
  
- //GET para obtener el stream que fluye
-  Stream<List<ScanModel>> get scansStream => _scanStreamController.stream;
+ //GET para obtener el stream que fluye de tipo geo ( nota que agrege el streamTransformer de la clase validator mia )
+  Stream<List<ScanModel>> get scansStream => _scanStreamController.stream.transform(validaGeo);
  
- //GET para obtener el stream que fluye de tipo http
-  Stream<List<ScanModel>> get scansStreamHttp => _scanStreamController.stream;
+ //GET para obtener el stream que fluye de tipo http ( nota que agrege el streamTransformer de la clase validator mia )
+  Stream<List<ScanModel>> get scansStreamHttp => _scanStreamController.stream.transform(validaHttp);
   
  obtenerScans() async{
 
@@ -71,10 +73,10 @@ static final ScansBloc _singlenton = new ScansBloc._internal();
 
  }
 
- borrarScanTodos() async{
+ borrarScanTodos(String tipo) async{
    
       //mando a borrar tdos ,con el await garantico que no salte hasta que se ejecute   
-     await DBProvider.db.deleteAll();
+     await DBProvider.db.deleteByTipe(tipo);
       
       //actualizo mi stream de nuevo
      obtenerScans();

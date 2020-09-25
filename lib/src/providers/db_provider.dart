@@ -141,6 +141,18 @@ class DBProvider{
        
       return res; 
    }
+
+         //eliminar scan
+   Future<int> deleteByTipe( String tipe ) async{
+      
+      final db  = await database; //await por que retona un future
+      
+      //ojo si aqui no paso el where 
+      final res = await db.delete('Scans',where: 'tipo = ?',whereArgs: [tipe]);
+       
+      return res; 
+   }
+    
       
       //eliminar todos los argumentos de la tabla
       Future<int> deleteAll( ) async{

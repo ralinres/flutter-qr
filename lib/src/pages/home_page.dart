@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
    
    final scanBloc = ScansBloc();
    int _currentPage = 0;
+   String currentTipe ="geo";
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
                IconButton(
                  icon: Icon(Icons.delete_forever),
                  onPressed: () {
-                    scanBloc.borrarScanTodos();
+                    scanBloc.borrarScanTodos(currentTipe);
                  },
                  )
              ],
@@ -93,11 +94,11 @@ class _HomePageState extends State<HomePage> {
   Widget _llamarPagina( int paginaActual){
        
        switch (paginaActual) {
-         case 0: return MapasPage();
-         case 1: return DireccionesPage();
+         case 0: currentTipe = "geo"; return MapasPage();
+         case 1: currentTipe = "http"; return DireccionesPage();
          
          default:
-            return MapasPage();
+           currentTipe = "geo"; return  MapasPage();
        }
 
 
